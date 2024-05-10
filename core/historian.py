@@ -1,15 +1,12 @@
-import os
-import yfinance as yf
-from supabase import create_client
 from datetime import datetime, timedelta
 from .service import FinanceService, SupabaseService
 
 class Historian:
     START_DATA = datetime(2022, 12, 31)
 
-    def __init__(self, url: str, key: str) -> None:        
-        self._database = SupabaseService(create_client(os.environ["URL"], os.environ["KEY"]))
-        self._finance = FinanceService(yf.Ticker)
+    def __init__(self, database: SupabaseService, finance: FinanceService) -> None:        
+        self._database = database
+        self._finance = finance
 
     def update_dbs(self, until: datetime):
         for stock_name in self._database.stocks():

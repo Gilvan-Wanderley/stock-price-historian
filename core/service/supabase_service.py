@@ -10,7 +10,6 @@ class SupabaseService:
         def wrapper(self):
             self._client.auth.sign_in_with_password({"email":os.environ["EMAIL"], "password":os.environ["PASSWORD"]})
             result = method(self)
-            print("Sign out")
             self._client.sign_out()
             return result
         return wrapper    
