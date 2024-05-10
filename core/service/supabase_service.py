@@ -1,5 +1,25 @@
 from datetime import datetime
-from supabase import create_client, Client
+from supabase import Client
 
 class SupabaseService:
-    pass
+    def __init__(self, client: Client) -> None:
+        self._client= client
+
+    def stocks(self) -> list[str]:
+        table = self._client.table("stocks").select("name").execute()
+        return list(map(lambda x: x["name"], table.data))
+    
+    def last_update(self, stock_name: str) -> None | datetime:
+        responde = self._client.table("stocks").select("last_update").eq("name",stock_name).execute()
+        date = responde.data[0]["last_update"]
+        return None if date == None else datetime.strptime(date, '%Y-%m-%d')
+
+    def insert(self, table: str, data: dict) -> None:
+        try:
+            self._client.table(table).insert(data).execute()
+        except:
+            raise Exception(f"Invalid insert in {table}.")
+
+    def update_changes(self,  stock_name: str) -> None:
+        last_update = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        self._client.table("stocks").update({"last_update": last_update}).eq("name", stock_name).execute()
