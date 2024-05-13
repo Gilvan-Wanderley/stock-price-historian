@@ -1,2 +1,2 @@
-from finance_service import FinanceService
-from supabase_service import SupabaseService
+from .finance_service import FinanceService
+from .supabase_service import SupabaseService

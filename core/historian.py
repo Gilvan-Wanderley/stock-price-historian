@@ -9,8 +9,9 @@ class Historian:
         self._finance = finance
 
     def update_dbs(self, until: datetime):
+        self._database.sign_in()
         for stock_name in self._database.stocks():
-            last_update = self._database.last_update(stock_name)
+            last_update = self._database.last_update(stock_name=stock_name)
             last_update = self.START_DATA if last_update == None else last_update
             total_days = (until - last_update).days
             if total_days > 0:
@@ -23,3 +24,4 @@ class Historian:
                             data = self._finance.get_data(index, row) 
                             self._database.insert(stock_name, data)
             self._database.update_changes(stock_name)
+        self._database.sign_out()
