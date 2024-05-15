@@ -16,3 +16,4 @@ def trigger_24h(myTimer: func.TimerRequest) -> None:
     historian = Historian(database(), finance())
     historian.update_dbs(time)
     logging.info(f"{time} - Update!")
+
